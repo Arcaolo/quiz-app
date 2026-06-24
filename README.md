@@ -1,25 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Intelligent Systems Quiz
+
+A community-driven exam prep app built with Next.js, React, and Supabase. Features 40 random questions per session, flagging, review mode, score history, PDF export, and question contribution.
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Adding Questions via JSON
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`questions.json` at the repo root mirrors the Supabase question database. Editing it and pushing to `master` automatically syncs the changes via GitHub Actions.
 
-## Description
+### Steps
 
-Intelligent Quiz is an interactive, community-driven quiz application built with Next.js, React, and TypeScript. It features a robust question database powered by Supabase, allowing users to take timed or untimed quizzes with 40 randomly selected questions. Key features include question flagging, real-time navigation, detailed review mode with answer feedback, score history tracking, and the ability for users to contribute new questions. The app is fully responsive, optimized for both desktop and mobile, and deployed on Vercel. Includes PDF export functionality for the full question database.
+1. Open `questions.json` and append a new entry — **omit `id`**, it is assigned automatically:
+
+```json
+{
+  "text": "Your question here?",
+  "options": ["Option A", "Option B", "Option C"],
+  "correct_answer": 0
+}
+```
+
+`correct_answer` is the **zero-based index** of the correct option (`0` = first option, `2` = third, etc.).
+
+2. Commit and push to `master` — the sync workflow fires automatically.
+
+### Sync overview
+
+| Direction | Trigger | Behaviour |
+|---|---|---|
+| JSON → Supabase | Push to `master` (when `questions.json` changed) | Upserts existing questions; inserts new ones (no `id` needed) |
+| Supabase → JSON | Cron every 30 min | Fetches DB, commits `questions.json` if anything changed |
+
+> Deletions are intentionally not synced — remove questions directly in Supabase to avoid accidental data loss.
+
+### Required GitHub Secrets
+
+Add these in **Settings → Secrets → Actions** for the workflows to run:
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+### Running sync locally
+
+```bash
+node scripts/supabase-to-json.mjs   # Supabase → questions.json
+node scripts/json-to-supabase.mjs   # questions.json → Supabase
+```

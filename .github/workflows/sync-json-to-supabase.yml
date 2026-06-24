@@ -1,0 +1,23 @@
+name: Sync JSON → Supabase
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - questions.json
+
+jobs:
+  sync:
+    # Prevent loop: skip commits made by the cron sync bot
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install --no-save @supabase/supabase-js dotenv
+      - run: node scripts/json-to-supabase.mjs
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}

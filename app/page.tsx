@@ -229,7 +229,7 @@ export default function QuizApp() {
               ))}
               <button onClick={() => setNewQOptions([...newQOptions, ""])} className="text-sm text-blue-600 mb-4">+ Option</button>
               <div className="flex justify-between items-center">
-                <span className="text-green-600 font-medium">{submitStatus}</span>
+                <span className={cn("font-medium", submitStatus.startsWith("Error") ? "text-red-600" : "text-green-600")}>{submitStatus}</span>
                 <div className="flex gap-2">
                   <button onClick={() => setShowAddForm(false)} className="px-4 py-2 text-slate-500">Cancel</button>
                   <button onClick={handleAddQuestion} className="px-4 py-2 bg-green-600 text-white rounded">Submit</button>
