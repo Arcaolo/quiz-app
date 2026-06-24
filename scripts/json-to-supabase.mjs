@@ -6,9 +6,10 @@ try {
   config({ path: '.env.local' });
 } catch {}
 
+// Service role key bypasses RLS — safe here because this script only runs server-side
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
 const questions = JSON.parse(readFileSync('./questions.json', 'utf8'));

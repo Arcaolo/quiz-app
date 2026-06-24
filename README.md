@@ -44,7 +44,8 @@ Open [http://localhost:3000](http://localhost:3000).
 Add these in **Settings → Secrets → Actions** for the workflows to run:
 
 - `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` — used by the Supabase → JSON cron
+- `SUPABASE_SERVICE_ROLE_KEY` — used by the JSON → Supabase sync (bypasses RLS to allow updates)
 
 ### Running sync locally
 
