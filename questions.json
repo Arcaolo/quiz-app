@@ -1571,10 +1571,5 @@
       "none"
     ],
     "correct_answer": 0
-  },
-  {
-    "text": "[SYNC TEST] This question was added via questions.json to verify the GitHub Actions sync workflow.",
-    "options": ["It works", "It does not work"],
-    "correct_answer": 0
   }
 ]
